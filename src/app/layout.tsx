@@ -5,6 +5,9 @@ import "./globals.css";
 
 import { createClient } from "@/prismicio";
 
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+
 const nunito = Nunito({
   subsets: ["latin"],
   variable: "--font-nunito",
@@ -22,15 +25,16 @@ export async function generateMetadata(): Promise<Metadata> {
 
   const client = createClient();
 
-  const page = await client.getSingle("settings");
+  const settings = await client.getSingle("settings");
 
   return {
-    title: page.data.site_title || "Flowrise fallback",
+    title: settings.data.site_title || "Flowrise fallback",
     description:
-      page.data.meta_description || "Flowrise is the relaxing app for you.",
+      settings.data.meta_description || "Flowrise is the relaxing app for you.",
     openGraph: {
       images: [
-        page.data.og_image.url || "https://picsum.photos/seed/picsum/200/300",
+        settings.data.og_image.url ||
+          "https://picsum.photos/seed/picsum/200/300",
       ],
     },
   };
@@ -44,9 +48,9 @@ export default function RootLayout({
   return (
     <html lang="en" className={clsx(nunito.variable, nunito_sans.variable)}>
       <body>
-        <header>Header !</header>
+        <Header />
         {children}
-        <footer>footer !</footer>
+        <Footer />
       </body>
     </html>
   );
